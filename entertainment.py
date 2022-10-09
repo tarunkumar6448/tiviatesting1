@@ -21,6 +21,19 @@ def start(message):
     except Exception:
         bot.reply_to(message, 'oooops')
 
+
+@bot.message_handler(commands=["done"])
+def done(message):
+    name = message.text
+    spltarray = name.split(" ",2)
+    mv_name = spltarray[2]
+    c_id = spltarray[1]
+    try:
+        markup = types.ReplyKeyboardMarkup(row_width=2)
+        bot.send_message(c_id, f'The movie has been added to the database 😊\n You can retry now\n try saying"{mv_name}"', reply_markup=markup)
+    except Exception:
+        bot.reply_to(message, 'oooops')
+
 @bot.message_handler(func=lambda message: message.text.lower() in ['ok'])
 def ok(message):
     try:
@@ -69,18 +82,6 @@ def name(message):
                 bot.send_photo(message.chat.id, img,f"<b>TITLE:</b> <i>{name}</i>\n"
                                                     f"\n<b>SIZE:</b> <i>{file_size}</i>\n", parse_mode = 'html',reply_markup = markup)
 
-    except Exception:
-        bot.reply_to(message, 'oooops')
-
-@bot.message_handler(commands=["done"])
-def done(message):
-    name = message.text
-    spltarray = name.split(" ",2)
-    mv_name = spltarray[2]
-    c_id = spltarray[1]
-    try:
-        markup = types.ReplyKeyboardMarkup(row_width=2)
-        bot.send_message(c_id, f'The movie has been added to the database 😊\n You can retry now\n try saying"{mv_name}"', reply_markup=markup)
     except Exception:
         bot.reply_to(message, 'oooops')
 
