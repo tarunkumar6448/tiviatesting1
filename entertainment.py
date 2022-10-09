@@ -10,6 +10,8 @@ from telebot import types
 
 API_TOKEN = '5252289753:AAEk5edcuo1ZTmvhWETeJa1qbEYA8kCeoi8'
 
+bot = telebot.TeleBot(API_TOKEN)
+
 @bot.message_handler(commands=["start"])
 def start(message):
     print(message.chat.id)
