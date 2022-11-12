@@ -77,9 +77,9 @@ def name(message):
                 file_size = "%s %s" % (s, size_name[i])
                 watch_link = f"https://dood.wf/d/{code}"
                 watch_link1 = f"https://dood.re/d/{code}"
-                markup = telebot.types.InlineKeyboardMarkup(row_width=1)
+                markup = telebot.types.InlineKeyboardMarkup(row_width=2)
                 btn1 = telebot.types.InlineKeyboardButton('Watch', url= watch_link, callback_data="click")
-                btn2 = telebot.types.InlineKeyboardButton('alternate link', url= watch_link1, callback_data="click")
+                btn2 = telebot.types.InlineKeyboardButton('alternate link', url= watch_link1)
                 markup.add(btn1, btn2)
                 bot.send_photo(message.chat.id, img,f"<b>TITLE:</b> <i>{name}</i>\n"
                                                     f"\n<b>SIZE:</b> <i>{file_size}</i>\n", parse_mode = 'html',reply_markup = markup)
