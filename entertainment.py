@@ -79,7 +79,7 @@ def name(message):
                 watch_link = f"https://dood.re/d/{code}"
                 markup = telebot.types.InlineKeyboardMarkup(row_width=1)
                 btn1 = telebot.types.InlineKeyboardButton('Watch', url= watch_link, callback_data="click")
-                btn2 = telebot.types.inlineKeyboardButton('alternate link', url= watch_link1, callback_data="click")
+                btn2 = telebot.types.InlineKeyboardButton('alternate link', url= watch_link1, callback_data="click")
                 markup.add(btn1)
                 bot.send_photo(message.chat.id, img,f"<b>TITLE:</b> <i>{name}</i>\n"
                                                     f"\n<b>SIZE:</b> <i>{file_size}</i>\n", parse_mode = 'html',reply_markup = markup)
