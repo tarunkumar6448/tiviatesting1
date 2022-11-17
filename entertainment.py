@@ -26,7 +26,7 @@ def start(message):
 def done(message):
     name = message.reply_to_message.text
     print(name)
-    spltarray = name.split(" ")
+    spltarray = name.split(" ",1)
     mv_name = spltarray[1]
     c_id = spltarray[0]
     try:
