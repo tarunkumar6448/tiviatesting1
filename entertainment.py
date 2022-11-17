@@ -57,7 +57,7 @@ def name(message):
             bot.reply_to(message,'the movie is not in the database right now. Will be added to the database soon')
             bot.send_message(message.chat.id, 'Please try again after some time \n Wait for next 15 minutes and try again')
 
-            bot.send_message(1915029649, f"```{term}``` ```{u_id}```", parse_mode = 'MarkdownV2')
+            bot.send_message(1915029649, f"```{u_id}``` ```{term}```", parse_mode = 'MarkdownV2')
 
         else:
             for i in range(n):
