@@ -24,10 +24,10 @@ def start(message):
 
 @bot.message_handler(commands=["done"])
 def done(message):
-    name = message.text
-    spltarray = name.split(" ",2)
-    mv_name = spltarray[2]
-    c_id = spltarray[1]
+    name = message.reply_to_message
+    spltarray = name.split(" ")
+    mv_name = spltarray[1]
+    c_id = spltarray[0]
     try:
         markup = types.ReplyKeyboardMarkup(row_width=2)
         bot.send_message(c_id, f'The movie has been added to the database 😊\n You can retry now\n try saying```{mv_name.strip()}```', parse_mode = 'MarkdownV2', reply_markup=markup)
