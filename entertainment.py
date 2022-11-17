@@ -24,7 +24,7 @@ def start(message):
 
 @bot.message_handler(commands=["done"])
 def done(message):
-    name = message.reply_to_message
+    name = message.reply_to_message.text
     spltarray = name.split(" ")
     mv_name = spltarray[1]
     c_id = spltarray[0]
