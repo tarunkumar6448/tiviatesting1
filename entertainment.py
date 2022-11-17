@@ -31,7 +31,7 @@ def done(message):
     c_id = spltarray[0]
     try:
         markup = types.ReplyKeyboardMarkup(row_width=2)
-        bot.send_message(c_id, f'The movie has been added to the database 😊\n You can retry now\n try saying```{mv_name}```', parse_mode = 'MarkdownV2', reply_markup=markup)
+        bot.send_message(c_id, f'The movie has been added to the database 😊\n You can retry now\n try saying```done {mv_name}```', parse_mode = 'MarkdownV2', reply_markup=markup)
     except Exception:
         bot.reply_to(message, 'oooops')
 
