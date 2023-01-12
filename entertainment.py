@@ -85,7 +85,7 @@ def name(message):
                 bot.send_photo(message.chat.id, img,f"<b>TITLE:</b> <i>{name}</i>\n"
                                                     f"\n<b>SIZE:</b> <i>{file_size}</i>\n", parse_mode = 'html',reply_markup = markup)
 
-    except Exception:
-        bot.reply_to(message, 'oooops')
+   # except Exception:
+   #     bot.reply_to(message, 'oooops')
 
 bot.polling()
