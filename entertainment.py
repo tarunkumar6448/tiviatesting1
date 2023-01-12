@@ -44,8 +44,7 @@ def ok(message):
 
 @bot.message_handler(regexp=r'\b[ a-zA-Z.]+\b')
 def name(message):
-    try:
-        term = message.text
+    term = message.text
         u_id = message.from_user.id
         # print(term)
         url = requests.get(f"https://doodapi.com/api/search/videos?key=13527p8pcv54of4yjeryk&search_term={term}")
@@ -84,6 +83,8 @@ def name(message):
                 markup.add(btn1, btn2)
                 bot.send_photo(message.chat.id, img,f"<b>TITLE:</b> <i>{name}</i>\n"
                                                     f"\n<b>SIZE:</b> <i>{file_size}</i>\n", parse_mode = 'html',reply_markup = markup)
+#     try:
+        
 
    # except Exception:
    #     bot.reply_to(message, 'oooops')
