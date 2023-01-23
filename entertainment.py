@@ -43,7 +43,8 @@ def ok(message):
         bot.reply_to(message, 'oooops')
 
 @bot.message_handler(regexp=r'\b[ a-zA-Z.]+\b')
-def name(message):
+     try:
+        def name(message):
     term = message.text
     u_id = message.from_user.id
     print(term)
@@ -90,10 +91,8 @@ def name(message):
             bot.send_photo(message.chat.id, img, f"<b>TITLE:</b> <i>{name}</i>\n"
                                                  f"\n<b>SIZE:</b> <i>{file_size}</i>\n", parse_mode='html',
                            reply_markup=markup)
-#     try:
-        
 
-   # except Exception:
-   #     bot.reply_to(message, 'oooops')
+    except Exception:
+        bot.reply_to(message, 'oooops')
 
 bot.polling()
