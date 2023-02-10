@@ -1,4 +1,3 @@
-import logging
 import telebot
 import requests
 import json
@@ -8,13 +7,7 @@ from telebot import types
 from telebot import custom_filters
 from telebot import types
 
-# handler = logging.FileHandler("log.txt")
-logging.basicConfig(filename=log.txt, level=logging.DEBUG,
-                    format='%(asctime)s %(levelname)s %(message)s',
-                    datefmt='%m/%d/%Y %I:%M:%S %p',
-                    handlers=[logging.StreamHandler()])
-
-API_TOKEN = '5252289753:AAEk5edcuo1ZTmvhWETeJa1qbEYA8kCeoi8'
+API_TOKEN = '5505287179:AAFu9iQ7jTeY8JM_KTN7hPe6oUawkYI195A'
 
 bot = telebot.TeleBot(API_TOKEN)
 
@@ -26,8 +19,7 @@ class User:
 
 @bot.message_handler(commands=["start"])
 def start(message):
-#   print(message.chat.id)
-    logging.info(message.chat.id)
+    print(message.chat.id)
     try:
         markup = types.ReplyKeyboardMarkup(row_width=2)
         bot.reply_to(message, 'okey! now enter any name of movie or webseries you want to watch today',
@@ -64,8 +56,7 @@ def name(message):
     try:
         term = message.text
         u_id = message.from_user.id
-#       print(term)
-        logging.info(term)
+        print(term)
         url = requests.get(f"https://doodapi.com/api/search/videos?key=13527p8pcv54of4yjeryk&search_term={term}")
         data = url.text
         parse_json = json.loads(data)
@@ -117,11 +108,9 @@ def name(message):
 @bot.callback_query_handler(func=lambda c: c.data == 'click')
 def click(call: types.CallbackQuery):
     try:
-        #print(call.message.chat.id)
-        logging.info(call.message.chat.id)
+        print(call.message.chat.id)
     except Exception:
-#       print("something went wrong")
-        logging.info("something went wrong")
+        print("something went wrong")
 
 
 @bot.callback_query_handler(func=lambda c: c.data == 'done_default')
@@ -130,8 +119,7 @@ def done_default(call: types.CallbackQuery):
     raw_text = call.message.text
     txtsplt = raw_text.split(',')
     u_id = txtsplt[1]
- #   print(u_id)
-    logging.info(u_id)
+    print(u_id)
     mv_name = txtsplt[0]
     try:
         # print(f"{mv_name} & {u_id}")
@@ -140,8 +128,7 @@ def done_default(call: types.CallbackQuery):
                          parse_mode="Markdownv2")
         bot.send_message(1915029649, "message sent successfully ")
     except Exception:
-        #print("something went wrong")
-        logging.info("something went wrong")
+        print("something went wrong")
         bot.send_message(1915029649, "kuch glt ho gaya :(")
 
 @bot.callback_query_handler(func=lambda c: c.data == 'done_custom')
@@ -150,8 +137,7 @@ def done_custom(call: types.CallbackQuery):
     raw_text = call.message.text
     txtsplt = raw_text.split(',')
     u_id = txtsplt[1]
-    #print(u_id)
-    logging.info(u_id)
+    print(u_id)
     user = User(u_id)
     user_dict[c_id] = user
     # mv_name = txtsplt[0]
@@ -160,8 +146,7 @@ def done_custom(call: types.CallbackQuery):
         msg = bot.send_message(c_id, "Enter correct name")
         bot.register_next_step_handler(msg, crct_name)
     except Exception:
-        #print("something went wrong")
-        logging.info("something went wrong")
+        print("something went wrong")
         bot.send_message(1915029649, "kuch glt ho gaya :(")
 
 def crct_name(message):
@@ -175,10 +160,9 @@ def crct_name(message):
                          parse_mode="Markdownv2")
         bot.send_message(1915029649, "message sent successfully ")
     except Exception:
-        #print("something went wrong")
-        logging.info("something went wrong")
+        print("something went wrong")
         bot.send_message(1915029649, "kuch glt ho gaya :(")
-        
+
 bot.enable_save_next_step_handlers(delay=2)
 
 bot.load_next_step_handlers()
