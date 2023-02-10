@@ -8,7 +8,8 @@ from telebot import types
 from telebot import custom_filters
 from telebot import types
 
-logging.basicConfig(level=logging.DEBUG,
+handler = logging.FileHandler("log.txt")
+logging.basicConfig(level=logging.DEBUG, 
                     format='%(asctime)s %(levelname)s %(message)s',
                     datefmt='%m/%d/%Y %I:%M:%S %p',
                     handlers=[logging.StreamHandler()])
