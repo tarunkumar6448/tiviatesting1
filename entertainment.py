@@ -1,98 +1,185 @@
+import logging
 import telebot
 import requests
 import json
 import math
 from telebot import types
 
-
 from telebot import custom_filters
 from telebot import types
+
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s %(levelname)s %(message)s',
+                    datefmt='%m/%d/%Y %I:%M:%S %p',
+                    handlers=[logging.StreamHandler()])
 
 API_TOKEN = '5252289753:AAEk5edcuo1ZTmvhWETeJa1qbEYA8kCeoi8'
 
 bot = telebot.TeleBot(API_TOKEN)
 
+user_dict = {}
+
+class User:
+    def __init__(self,u_id):
+        self.u_id = u_id
+
 @bot.message_handler(commands=["start"])
 def start(message):
-    print(message.chat.id)
+#   print(message.chat.id)
+    logging.info(message.chat.id)
     try:
         markup = types.ReplyKeyboardMarkup(row_width=2)
-        bot.reply_to(message, 'okey! now enter any name of movie or webseries you want to watch today', reply_markup=markup)
+        bot.reply_to(message, 'okey! now enter any name of movie or webseries you want to watch today',
+                     reply_markup=markup)
     except Exception:
         bot.reply_to(message, 'oooops')
 
 
 @bot.message_handler(commands=["done"])
 def done(message):
-    name = message.reply_to_message.text
-    print(name)
-    spltarray = name.split(" ",1)
-    mv_name = spltarray[1]
-    c_id = spltarray[0]
+    name = message.text
+    spltarray = name.split(" ", 2)
+    mv_name = spltarray[2]
+    c_id = spltarray[1]
     try:
         markup = types.ReplyKeyboardMarkup(row_width=2)
-        bot.send_message(c_id, f'The movie has been added to the database 😊\n You can retry now\n try saying```done {mv_name}```', parse_mode = 'MarkdownV2', reply_markup=markup)
+        bot.send_message(c_id,
+                         f'The movie has been added to the database 😊\n You can retry now\n try saying```{mv_name.strip()}```',
+                         parse_mode='MarkdownV2', reply_markup=markup)
     except Exception:
         bot.reply_to(message, 'oooops')
+
 
 @bot.message_handler(func=lambda message: message.text.lower() in ['ok'])
 def ok(message):
     try:
-        bot.reply_to(message, "😊", reply_markup=markup)
+        bot.reply_to(message, "😊")
     except Exception as e:
         bot.reply_to(message, 'oooops')
 
+
 @bot.message_handler(regexp=r'\b[ a-zA-Z.]+\b')
-     try:
-        def name(message):
-    term = message.text
-    u_id = message.from_user.id
-    print(term)
-    url = requests.get(f"https://doodapi.com/api/search/videos?key=13527p8pcv54of4yjeryk&search_term={term}")
-    data = url.text
-    parse_json = json.loads(data)
+def name(message):
+    try:
+        term = message.text
+        u_id = message.from_user.id
+#       print(term)
+        logging.info(term)
+        url = requests.get(f"https://doodapi.com/api/search/videos?key=13527p8pcv54of4yjeryk&search_term={term}")
+        data = url.text
+        parse_json = json.loads(data)
 
-    n = len(parse_json['result'])
-    if n == 0:
-        bot.reply_to(message, 'the movie is not in the database right now. Will be added to the database soon')
-        bot.send_message(message.chat.id,
-                         'Please try again after some time \n Wait for next 15 minutes and try again')
+        n = len(parse_json['result'])
+        if n == 0:
+            bot.reply_to(message, 'the movie is not in the database right now. Will be added to the database soon')
+            bot.send_message(message.chat.id,
+                             'Please try again after some time \n Wait for next 15 minutes and try again')
 
-        markup = telebot.types.InlineKeyboardMarkup(row_width=2)
-        btn1 = telebot.types.InlineKeyboardButton('done default', callback_data="done_default")
-        btn2 = telebot.types.InlineKeyboardButton('done custom', callback_data='done_custom')
-        markup.add(btn1, btn2)
-        bot.send_message(1915029649, f"```request {term}```,```{u_id}```", parse_mode='MarkdownV2',
-                         reply_markup=markup)
-
-    else:
-        for i in range(n):
-            code = parse_json['result'][i]['file_code']
-            img = parse_json['result'][i]['splash_img']
-            name = parse_json['result'][i]['title']
-            s_url = requests.get(f"https://doodapi.com/api/file/info?key=13527p8pcv54of4yjeryk&file_code={code}")
-            sdata = s_url.text
-            s_parse = json.loads(sdata)
-            raw_size = s_parse['result'][0]['size']
-            size = int(raw_size)
-            if size == 0:
-                return "0B"
-            size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
-            i = int(math.floor(math.log(size, 1024)))
-            p = math.pow(1024, i)
-            s = round(size / p, 2)
-            file_size = "%s %s" % (s, size_name[i])
-            watch_link = f"https://dood.wf/d/{code}"
-            watch_link1 = f"https://dood.re/d/{code}"
             markup = telebot.types.InlineKeyboardMarkup(row_width=2)
-            btn1 = telebot.types.InlineKeyboardButton('Watch', url=watch_link, callback_data="click")
-            btn2 = telebot.types.InlineKeyboardButton('alternate link', url=watch_link1)
-            markup.add(btn1, btn2)
-            bot.send_photo(message.chat.id, img, f"<b>TITLE:</b> <i>{name}</i>\n"
-                                                 f"\n<b>SIZE:</b> <i>{file_size}</i>\n", parse_mode='html',
-                           reply_markup=markup)
+            btn1 = telebot.types.InlineKeyboardButton('done default', callback_data="done_default")
+            btn2 = telebot.types.InlineKeyboardButton('done custom', callback_data= 'done_custom')
+            markup.add(btn1,btn2)
+            bot.send_message(1915029649, f"```request {term}```,```{u_id}```", parse_mode='MarkdownV2',
+                             reply_markup=markup)
+
+        else:
+            for i in range(n):
+                code = parse_json['result'][i]['file_code']
+                img = parse_json['result'][i]['splash_img']
+                name = parse_json['result'][i]['title']
+                s_url = requests.get(f"https://doodapi.com/api/file/info?key=13527p8pcv54of4yjeryk&file_code={code}")
+                sdata = s_url.text
+                s_parse = json.loads(sdata)
+                raw_size = s_parse['result'][0]['size']
+                size = int(raw_size)
+                if size == 0:
+                    return "0B"
+                size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+                i = int(math.floor(math.log(size, 1024)))
+                p = math.pow(1024, i)
+                s = round(size / p, 2)
+                file_size = "%s %s" % (s, size_name[i])
+                watch_link = f"https://dood.wf/d/{code}"
+                watch_link1 = f"https://dood.re/d/{code}"
+                markup = telebot.types.InlineKeyboardMarkup(row_width=2)
+                btn1 = telebot.types.InlineKeyboardButton('Watch', url=watch_link, callback_data="click")
+                btn2 = telebot.types.InlineKeyboardButton('alternate link', url=watch_link1)
+                markup.add(btn1, btn2)
+                bot.send_photo(message.chat.id, img, f"<b>TITLE:</b> <i>{name}</i>\n"
+                                                     f"\n<b>SIZE:</b> <i>{file_size}</i>\n", parse_mode='html',
+                               reply_markup=markup)
 
     except Exception:
         bot.reply_to(message, 'oooops')
+
+
+@bot.callback_query_handler(func=lambda c: c.data == 'click')
+def click(call: types.CallbackQuery):
+    try:
+        #print(call.message.chat.id)
+        logging.info(call.message.chat.id)
+    except Exception:
+#       print("something went wrong")
+        logging.info("something went wrong")
+
+
+@bot.callback_query_handler(func=lambda c: c.data == 'done_default')
+def done_default(call: types.CallbackQuery):
+    c_id = call.message.chat.id
+    raw_text = call.message.text
+    txtsplt = raw_text.split(',')
+    u_id = txtsplt[1]
+ #   print(u_id)
+    logging.info(u_id)
+    mv_name = txtsplt[0]
+    try:
+        # print(f"{mv_name} & {u_id}")
+        bot.send_message(u_id.strip(),
+                         f"The movie has been added to the database 😊\nYou can retry now\nTry saying```waste {mv_name.strip()}```",
+                         parse_mode="Markdownv2")
+        bot.send_message(1915029649, "message sent successfully ")
+    except Exception:
+        #print("something went wrong")
+        logging.info("something went wrong")
+        bot.send_message(1915029649, "kuch glt ho gaya :(")
+
+@bot.callback_query_handler(func=lambda c: c.data == 'done_custom')
+def done_custom(call: types.CallbackQuery):
+    c_id = call.message.chat.id
+    raw_text = call.message.text
+    txtsplt = raw_text.split(',')
+    u_id = txtsplt[1]
+    #print(u_id)
+    logging.info(u_id)
+    user = User(u_id)
+    user_dict[c_id] = user
+    # mv_name = txtsplt[0]
+    try:
+        # print(f"{mv_name} & {u_id}")
+        msg = bot.send_message(c_id, "Enter correct name")
+        bot.register_next_step_handler(msg, crct_name)
+    except Exception:
+        #print("something went wrong")
+        logging.info("something went wrong")
+        bot.send_message(1915029649, "kuch glt ho gaya :(")
+
+def crct_name(message):
+    chat_id = message.chat.id
+    mv_name = message.text
+    user = user_dict[chat_id]
+
+    try:
+        bot.send_message(user.u_id.strip(),
+                         f"The movie has been added to the database 😊\nYou can retry now\nTry saying```waste {mv_name.strip()}```",
+                         parse_mode="Markdownv2")
+        bot.send_message(1915029649, "message sent successfully ")
+    except Exception:
+        #print("something went wrong")
+        logging.info("something went wrong")
+        bot.send_message(1915029649, "kuch glt ho gaya :(")
+
+bot.enable_save_next_step_handlers(delay=2)
+
+bot.load_next_step_handlers()
 
 bot.polling()
