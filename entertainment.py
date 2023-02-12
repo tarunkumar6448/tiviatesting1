@@ -52,7 +52,7 @@ def ok(message):
         bot.reply_to(message, 'oooops')
 
 def fetch_size(code):
-    s_url = requests.post(f"https://doodapi.com/api/file/info?key=13527p8pcv54of4yjeryk&file_code={code}")
+    s_url = requests.post(f"https://doodapi.com/api/file/info?key=199239u23rqgvst3btp7yi&file_code={code}")
     sdata = s_url.text
     s_parse = json.loads(sdata)
     raw_size = s_parse['result'][0]['size']
@@ -72,7 +72,7 @@ def name(message):
         term = message.text
         u_id = message.from_user.id
         print(term)
-        url = requests.post(f"https://doodapi.com/api/search/videos?key=13527p8pcv54of4yjeryk&search_term={term}")
+        url = requests.post(f"https://doodapi.com/api/search/videos?key=199239u23rqgvst3btp7yi&search_term={term}")
         data = url.text
         parse_json = json.loads(data)
 
