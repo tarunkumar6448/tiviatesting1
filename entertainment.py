@@ -3,11 +3,12 @@ import requests
 import json
 import math
 from telebot import types
+import threading
 
 from telebot import custom_filters
 from telebot import types
 
-API_TOKEN = '5252289753:AAEk5edcuo1ZTmvhWETeJa1qbEYA8kCeoi8'
+API_TOKEN = '5620400281:AAHw03yvbtfCpitTWl_r3RXlSACHgeL2IPg'
 
 bot = telebot.TeleBot(API_TOKEN)
 
@@ -50,6 +51,20 @@ def ok(message):
     except Exception as e:
         bot.reply_to(message, 'oooops')
 
+def fetch_size(code):
+    s_url = requests.post(f"https://doodapi.com/api/file/info?key=13527p8pcv54of4yjeryk&file_code={code}")
+    sdata = s_url.text
+    s_parse = json.loads(sdata)
+    raw_size = s_parse['result'][0]['size']
+    size = int(raw_size)
+    if size == 0:
+        return "0B"
+    size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+    i = int(math.floor(math.log(size, 1024)))
+    p = math.pow(1024, i)
+    s = round(size / p, 2)
+    file_size = "%s %s" % (s, size_name[i])
+    return file_size
 
 @bot.message_handler(regexp=r'\b[ a-zA-Z.]+\b')
 def name(message):
@@ -75,22 +90,29 @@ def name(message):
                              reply_markup=markup)
 
         else:
+            threads = []
             for i in range(n):
                 code = parse_json['result'][i]['file_code']
                 img = parse_json['result'][i]['splash_img']
                 name = parse_json['result'][i]['title']
-                s_url = requests.post(f"https://doodapi.com/api/file/info?key=13527p8pcv54of4yjeryk&file_code={code}")
-                sdata = s_url.text
-                s_parse = json.loads(sdata)
-                raw_size = s_parse['result'][0]['size']
-                size = int(raw_size)
-                if size == 0:
-                    return "0B"
-                size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
-                i = int(math.floor(math.log(size, 1024)))
-                p = math.pow(1024, i)
-                s = round(size / p, 2)
-                file_size = "%s %s" % (s, size_name[i])
+                # s_url = requests.post(f"https://doodapi.com/api/file/info?key=13527p8pcv54of4yjeryk&file_code={code}")
+                # sdata = s_url.text
+                # s_parse = json.loads(sdata)
+                # raw_size = s_parse['result'][0]['size']
+                # size = int(raw_size)
+                # if size == 0:
+                #     return "0B"
+                # size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+                # i = int(math.floor(math.log(size, 1024)))
+                # p = math.pow(1024, i)
+                # s = round(size / p, 2)
+                # file_size = "%s %s" % (s, size_name[i])
+                t = threading.Thread(target=fetch_size(), args=(code,))
+                t.start()
+                threads.append(t)
+
+                file_size = threads[i]
+
                 watch_link = f"https://dood.wf/d/{code}"
                 watch_link1 = f"https://dood.re/d/{code}"
                 markup = telebot.types.InlineKeyboardMarkup(row_width=2)
