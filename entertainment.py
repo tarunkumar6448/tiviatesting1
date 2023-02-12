@@ -57,7 +57,7 @@ def name(message):
         term = message.text
         u_id = message.from_user.id
         print(term)
-        url = requests.get(f"https://doodapi.com/api/search/videos?key=13527p8pcv54of4yjeryk&search_term={term}")
+        url = requests.post(f"https://doodapi.com/api/search/videos?key=13527p8pcv54of4yjeryk&search_term={term}")
         data = url.text
         parse_json = json.loads(data)
 
@@ -79,7 +79,7 @@ def name(message):
                 code = parse_json['result'][i]['file_code']
                 img = parse_json['result'][i]['splash_img']
                 name = parse_json['result'][i]['title']
-                s_url = requests.get(f"https://doodapi.com/api/file/info?key=13527p8pcv54of4yjeryk&file_code={code}")
+                s_url = requests.post(f"https://doodapi.com/api/file/info?key=13527p8pcv54of4yjeryk&file_code={code}")
                 sdata = s_url.text
                 s_parse = json.loads(sdata)
                 raw_size = s_parse['result'][0]['size']
