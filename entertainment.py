@@ -52,7 +52,7 @@ def ok(message):
     except Exception as e:
         bot.reply_to(message, 'oooops')
 
-@timer (1,1)
+# @timer (1,1)
 def fetch_size(code):
     s_url = requests.post(f"https://doodapi.com/api/file/info?key=199239u23rqgvst3btp7yi&file_code={code}")
     sdata = s_url.text
