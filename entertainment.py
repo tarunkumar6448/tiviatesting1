@@ -19,6 +19,21 @@ class User:
     def __init__(self,u_id):
         self.u_id = u_id
 
+def fetch_size(code):
+    s_url = requests.post(f"https://doodapi.com/api/file/info?key=13527p8pcv54of4yjeryk&file_code={code}")
+    sdata = s_url.text
+    s_parse = json.loads(sdata)
+    raw_size = s_parse['result'][0]['size']
+    size = int(raw_size)
+    if size == 0:
+        return "0B"
+    size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+    i = int(math.floor(math.log(size, 1024)))
+    p = math.pow(1024, i)
+    s = round(size / p, 2)
+    file_size = "%s %s" % (s, size_name[i])
+    return file_size
+        
 @bot.message_handler(commands=["start"])
 def start(message):
     print(message.chat.id)
@@ -52,20 +67,7 @@ def ok(message):
     except Exception as e:
         bot.reply_to(message, 'oooops')
 
-def fetch_size(code):
-    s_url = requests.post(f"https://doodapi.com/api/file/info?key=13527p8pcv54of4yjeryk&file_code={code}")
-    sdata = s_url.text
-    s_parse = json.loads(sdata)
-    raw_size = s_parse['result'][0]['size']
-    size = int(raw_size)
-    if size == 0:
-        return "0B"
-    size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
-    i = int(math.floor(math.log(size, 1024)))
-    p = math.pow(1024, i)
-    s = round(size / p, 2)
-    file_size = "%s %s" % (s, size_name[i])
-    return file_size
+
 
 @bot.message_handler(regexp=r'\b[ a-zA-Z.]+\b')
 def name(message):
