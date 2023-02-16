@@ -96,14 +96,16 @@ def name(message):
             threads = []
             for i in range(n):
                 try:
+                    t = threading.Thread(target=fetch_size(), args=(code,))
+                    t.start()
+                    threads.append(t)
+
+                    file_size = threads[i]
+                    
                     code = parse_json['result'][i]['file_code']
                     img = parse_json['result'][i]['splash_img']
                     name = parse_json['result'][i]['title']
-#                     t = threading.Thread(target=fetch_size(), args=(code,))
-#                     t.start()
-#                     threads.append(t)
-
-#                     file_size = threads[i]
+                    
                     watch_link = f"https://dood.wf/d/{code}"
                     watch_link1 = f"https://dood.re/d/{code}"
                     markup = telebot.types.InlineKeyboardMarkup(row_width=2)
