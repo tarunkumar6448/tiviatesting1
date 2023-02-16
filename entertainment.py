@@ -19,20 +19,20 @@ class User:
     def __init__(self,u_id):
         self.u_id = u_id
 
-def fetch_size(code):
-    s_url = requests.post(f"https://doodapi.com/api/file/info?key=13527p8pcv54of4yjeryk&file_code={code}")
-    sdata = s_url.text
-    s_parse = json.loads(sdata)
-    raw_size = s_parse['result'][0]['size']
-    size = int(raw_size)
-    if size == 0:
-        return "0B"
-    size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
-    i = int(math.floor(math.log(size, 1024)))
-    p = math.pow(1024, i)
-    s = round(size / p, 2)
-    file_size = "%s %s" % (s, size_name[i])
-    return file_size
+# def fetch_size(code):
+#     s_url = requests.post(f"https://doodapi.com/api/file/info?key=13527p8pcv54of4yjeryk&file_code={code}")
+#     sdata = s_url.text
+#     s_parse = json.loads(sdata)
+#     raw_size = s_parse['result'][0]['size']
+#     size = int(raw_size)
+#     if size == 0:
+#         return "0B"
+#     size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+#     i = int(math.floor(math.log(size, 1024)))
+#     p = math.pow(1024, i)
+#     s = round(size / p, 2)
+#     file_size = "%s %s" % (s, size_name[i])
+#     return file_size
         
 @bot.message_handler(commands=["start"])
 def start(message):
@@ -99,11 +99,11 @@ def name(message):
                     code = parse_json['result'][i]['file_code']
                     img = parse_json['result'][i]['splash_img']
                     name = parse_json['result'][i]['title']
-                    t = threading.Thread(target=fetch_size(), args=(code,))
-                    t.start()
-                    threads.append(t)
+#                     t = threading.Thread(target=fetch_size(), args=(code,))
+#                     t.start()
+#                     threads.append(t)
 
-                    file_size = threads[i]
+#                     file_size = threads[i]
                     watch_link = f"https://dood.wf/d/{code}"
                     watch_link1 = f"https://dood.re/d/{code}"
                     markup = telebot.types.InlineKeyboardMarkup(row_width=2)
@@ -111,7 +111,7 @@ def name(message):
                     btn2 = telebot.types.InlineKeyboardButton('alternate link', url=watch_link1)
                     markup.add(btn1, btn2)
                     bot.send_photo(message.chat.id, img, f"<b>TITLE:</b> <i>{name}</i>\n"
-                                                     f"\n<b>SIZE:</b> <i>{file_size}</i>\n", parse_mode='html',
+                                                     f"\n<b>SIZE:</b> <i>file_size</i>\n", parse_mode='html',
                                 reply_markup=markup)
                 except:
                     pass
