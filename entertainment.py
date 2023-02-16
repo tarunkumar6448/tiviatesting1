@@ -96,11 +96,11 @@ def name(message):
             threads = []
             for i in range(n):
                 code = parse_json['result'][i]['file_code']
-                    t = threading.Thread(target=fetch_size(), args=(code,))
-                    t.start()
-                    threads.append(t)
+                t = threading.Thread(target=fetch_size(), args=(code,))
+                t.start()
+                threads.append(t)
 
-                    file_size = threads[i]
+                file_size = threads[i]
             for i in range(n):
                 try:
                                       
