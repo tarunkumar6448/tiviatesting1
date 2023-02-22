@@ -132,7 +132,7 @@ def name(message):
                     # btn2 = telebot.types.InlineKeyboardButton('alternate link', url=watch_link1)
                     # markup.add(btn1, btn2)
                     # img, name, file_size, markup = fetch_final_data(code)
-                        bot.send_photo(message.chat.id, img, f"<b>TITLE:</b> <i>{name}</i>\n"
+                    bot.send_photo(message.chat.id, img, f"<b>TITLE:</b> <i>{name}</i>\n"
                                                      f"\n<b>SIZE:</b> <i>{file_size}</i>\n", parse_mode='html',
                                     reply_markup=markup)
             except:
