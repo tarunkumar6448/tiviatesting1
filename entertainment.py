@@ -104,9 +104,12 @@ def name(message):
 
         else:
             # we will add the list of all file codes here/
-            for i in range(n):
-                try:
-                    code = f_codes[i]
+            try:
+                if  __name__ == "__main__":
+                    with multiprocessing.Pool(processes=-1) as pool:
+                        img, name, file_size, markup = pool.map(fetch_final_data, f_codes)
+
+                    # code = f_codes[i]
                     # code = parse_json['result'][i]['file_code']
                     # img = parse_json['result'][i]['splash_img']
                     # name = parse_json['result'][i]['title']
@@ -128,12 +131,12 @@ def name(message):
                     # btn1 = telebot.types.InlineKeyboardButton('Watch', url=watch_link, callback_data="click")
                     # btn2 = telebot.types.InlineKeyboardButton('alternate link', url=watch_link1)
                     # markup.add(btn1, btn2)
-                    img, name, file_size, markup = fetch_final_data(code)
-                    bot.send_photo(message.chat.id, img, f"<b>TITLE:</b> <i>{name}</i>\n"
+                    # img, name, file_size, markup = fetch_final_data(code)
+                        bot.send_photo(message.chat.id, img, f"<b>TITLE:</b> <i>{name}</i>\n"
                                                      f"\n<b>SIZE:</b> <i>{file_size}</i>\n", parse_mode='html',
-                                reply_markup=markup)
-                except:
-                    pass
+                                    reply_markup=markup)
+            except:
+                pass
 
     except Exception:
         bot.reply_to(message, 'oooops')
