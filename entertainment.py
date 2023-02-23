@@ -107,32 +107,9 @@ def name(message):
             try:
                 if  __name__ == "__main__":
                     with multiprocessing.Pool(processes=-1) as pool:
-                        img, name, file_size, markup = pool.map(fetch_final_data, f_codes)
-
-                    # code = f_codes[i]
-                    # code = parse_json['result'][i]['file_code']
-                    # img = parse_json['result'][i]['splash_img']
-                    # name = parse_json['result'][i]['title']
-                    # s_url = requests.get(f"https://doodapi.com/api/file/info?key=13527p8pcv54of4yjeryk&file_code={code}")
-                    # sdata = s_url.text
-                    # s_parse = json.loads(sdata)
-                    # raw_size = s_parse['result'][0]['size']
-                    # size = int(raw_size)
-                    # if size == 0:
-                    #     return "0B"
-                    # size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
-                    # i = int(math.floor(math.log(size, 1024)))
-                    # p = math.pow(1024, i)
-                    # s = round(size / p, 2)
-                    # file_size = "%s %s" % (s, size_name[i])
-                    # watch_link = f"https://dood.wf/d/{code}"
-                    # watch_link1 = f"https://dood.re/d/{code}"
-                    # markup = telebot.types.InlineKeyboardMarkup(row_width=2)
-                    # btn1 = telebot.types.InlineKeyboardButton('Watch', url=watch_link, callback_data="click")
-                    # btn2 = telebot.types.InlineKeyboardButton('alternate link', url=watch_link1)
-                    # markup.add(btn1, btn2)
-                    # img, name, file_size, markup = fetch_final_data(code)
-                    bot.send_photo(message.chat.id, img, f"<b>TITLE:</b> <i>{name}</i>\n"
+                        main_data = pool.map(fetch_final_data, f_codes)
+                        for img, name, file_size, markup in main data:
+                            bot.send_photo(message.chat.id, img, f"<b>TITLE:</b> <i>{name}</i>\n"
                                                      f"\n<b>SIZE:</b> <i>{file_size}</i>\n", parse_mode='html',
                                     reply_markup=markup)
             except:
