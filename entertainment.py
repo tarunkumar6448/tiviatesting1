@@ -109,7 +109,7 @@ def name(message):
                     with multiprocessing.Pool(processes=-1) as pool:
                         main_data = pool.map(fetch_final_data, f_codes)
                         for img, name, file_size, markup in main_data:
-                            bot.send_photo(message.chat.id, img, f"<b>TITLE:</b> <i>{name}</i>\n"
+                             bot.send_photo(message.chat.id, img, f"<b>TITLE:</b> <i>{name}</i>\n"
                                                      f"\n<b>SIZE:</b> <i>{file_size}</i>\n", parse_mode='html',
                                     reply_markup=markup)
             except:
