@@ -106,7 +106,7 @@ def name(message):
             # we will add the list of all file codes here/
             try:
                 if  __name__ == "__main__":
-                    with multiprocessing.Pool(processes=-1) as pool:
+                    with multiprocessing.Pool(processes=4) as pool:
                         main_data = pool.map(fetch_final_data, f_codes)
                         for img, name, file_size, markup in main_data:
                             bot.send_photo(message.chat.id, img, f"<b>TITLE:</b> <i>{name}</i>\n"
