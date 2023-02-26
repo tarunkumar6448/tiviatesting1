@@ -8,7 +8,7 @@ import multiprocessing
 from telebot import custom_filters
 from telebot import types
 
-API_TOKEN = '5620400281:AAHw03yvbtfCpitTWl_r3RXlSACHgeL2IPg'
+API_TOKEN = '5252289753:AAEk5edcuo1ZTmvhWETeJa1qbEYA8kCeoi8'
 
 bot = telebot.TeleBot(API_TOKEN)
 
